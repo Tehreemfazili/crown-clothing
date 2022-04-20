@@ -1,5 +1,4 @@
 //this is just for the use of firebase, we are not returining any jsx thats why we dont jsx extension
-import { async } from "@firebase/util";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -56,6 +55,12 @@ export const createUserDocumentFromAuth = async (
 };
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+
+  return await createUserWithEmailAndPassword(auth, email, password);
+};
+
+export const signInAuthUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) return;
 
   return await createUserWithEmailAndPassword(auth, email, password);

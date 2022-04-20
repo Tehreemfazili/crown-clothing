@@ -3,45 +3,38 @@ import { useState } from "react";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
+  signInAuthUserWithEmailAndPassword,
+  signInWithGooglePopup,
 } from "../../utils/firebase/firebase";
 import Button from "../button/button";
 import FormInput from "../form-input/form-input";
-import "./sign-up-form.scss";
+import "./sign-in-form.scss";
 
 const defaultFormFields = {
-  displayName: "",
   email: "",
   password: "",
-  confirmPassword: "",
 };
 
-const SignUpForm = () => {
+const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   // formFields is the object of defaultFormFields not the string
-  const { displayName, email, password, confirmPassword } = formFields;
-  // destructuring the object, so we can use the names directly
+  const { email, password } = formFields; // destructuring the object, so we can use the names directly
   //  we can also use formFields.email instead
 
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
   };
 
+  const logGoogleUser = async () => {
+    const { user } = await signInWithGooglePopup();
+    const userDocRef = await createUserDocumentFromAuth(user);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (password != confirmPassword) {
-      alert("password do not match");
-      return;
-    }
-
     try {
-      const { user } = await createAuthUserWithEmailAndPassword(
-        email,
-        password
-      );
-
-      await createUserDocumentFromAuth(user, { displayName });
-      resetFormFields();
+      const response = signInAuthUserWithEmailAndPassword(email, password);
     } catch (error) {
       console.log("error creating the user", error);
     }
@@ -57,19 +50,10 @@ const SignUpForm = () => {
 
   return (
     <div className="sign-up-container">
-      <h2> I do not have an account</h2>
-      <span> Sign up with your email and password</span>
+      <h2> Already have an account</h2>
+      <span> Sign in with your email and password</span>
       <form on onSubmit={handleSubmit}>
         {/* the onSubmit will run when the submit button is clicked it returns a call back function */}
-
-        <FormInput
-          label="Display Name"
-          type="text"
-          required
-          onChange={handleChange}
-          name="displayName"
-          value={displayName}
-        />
 
         <FormInput
           label="Email "
@@ -89,22 +73,20 @@ const SignUpForm = () => {
           value={password}
         />
 
-        <FormInput
-          label="Confirm Password"
-          type="password"
-          required
-          onChange={handleChange}
-          name="confirmPassword"
-          value={confirmPassword}
-        />
         {/* we added name in the input fields for that the handlechange function can be generic and we can directly target events by name */}
         {/* by adding names and using in the halderChnge function we can identify which input field is firing and which input field to update */}
         {/* name should be same as in the object */}
         {/*  */}
-        <Button type="submit">SIGN UP</Button>
+        <div className="buttons-container">
+          <Button type="submit">SIGN IN</Button>
+          <Button type="button" buttonType="google" onClick={logGoogleUser}>
+            GOOGLE SIGN IN
+          </Button>
+          {/* added type button because when on click both the bitton gets triggered as they are bydefault of type submit */}
+        </div>
       </form>
     </div>
   );
 };
 
-export default SignUpForm;
+export default SignInForm;
