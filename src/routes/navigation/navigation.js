@@ -3,8 +3,6 @@ import { Outlet, Link } from "react-router-dom";
 import { ReactComponent as CrwnLogo } from "../../assets/crown.svg";
 import "./navigation.scss";
 
-const Shop = () => <div>Hello world</div>;
-
 const Navigation = () => {
   return (
     <Fragment>
