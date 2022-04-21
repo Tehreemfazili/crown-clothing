@@ -6,6 +6,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from "./components/context/user-context";
 import { ProductsProvoder } from "./components/context/products-context";
+import { CartProvider } from "./components/context/cart-context";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,7 +15,9 @@ root.render(
       {/* now any app/component inside the app will access the context value inside the UserProvider */}
       <UserProvider>
         <ProductsProvoder>
-          <App />
+          <CartProvider>
+            <App />
+          </CartProvider>
         </ProductsProvoder>
       </UserProvider>
     </BrowserRouter>
