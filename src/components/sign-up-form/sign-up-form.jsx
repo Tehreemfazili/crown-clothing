@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 // to track the fields to make the form valid
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
 } from "../../utils/firebase/firebase";
 import Button from "../button/button";
+import { UserContext } from "../context/user-context";
 import FormInput from "../form-input/form-input";
 import "./sign-up-form.scss";
 
@@ -21,6 +22,8 @@ const SignUpForm = () => {
   const { displayName, email, password, confirmPassword } = formFields;
   // destructuring the object, so we can use the names directly
   //  we can also use formFields.email instead
+
+  const { setCurrentUser } = useContext(UserContext);
 
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
@@ -39,7 +42,7 @@ const SignUpForm = () => {
         email,
         password
       );
-
+      setCurrentUser(user);
       await createUserDocumentFromAuth(user, { displayName });
       resetFormFields();
     } catch (error) {

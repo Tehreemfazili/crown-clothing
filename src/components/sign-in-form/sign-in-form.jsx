@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 // to track the fields to make the form valid
 import {
-  createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
   signInAuthUserWithEmailAndPassword,
   signInWithGooglePopup,
 } from "../../utils/firebase/firebase";
 import Button from "../button/button";
+import { UserContext } from "../context/user-context";
+// { } as we get back the object
 import FormInput from "../form-input/form-input";
 import "./sign-in-form.scss";
 
@@ -21,6 +22,8 @@ const SignInForm = () => {
   const { email, password } = formFields; // destructuring the object, so we can use the names directly
   //  we can also use formFields.email instead
 
+  const { setCurrentUser } = useContext(UserContext);
+
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
   };
@@ -34,7 +37,8 @@ const SignInForm = () => {
     event.preventDefault();
 
     try {
-      const response = signInAuthUserWithEmailAndPassword(email, password);
+      const { user } = signInAuthUserWithEmailAndPassword(email, password);
+      setCurrentUser(user);
     } catch (error) {
       console.log("error creating the user", error);
     }
