@@ -5,6 +5,7 @@ import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from "./components/context/user-context";
+import { ProductsProvoder } from "./components/context/products-context";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -12,7 +13,9 @@ root.render(
     <BrowserRouter>
       {/* now any app/component inside the app will access the context value inside the UserProvider */}
       <UserProvider>
-        <App />
+        <ProductsProvoder>
+          <App />
+        </ProductsProvoder>
       </UserProvider>
     </BrowserRouter>
   </React.StrictMode>
